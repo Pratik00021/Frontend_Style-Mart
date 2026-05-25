@@ -1,0 +1,31 @@
+{
+	"folders": [],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Frontend",
+		"workbench.colorCustomizations": {
+			"titleBar.activeBackground": "#3498db",
+			"titleBar.activeForeground": "#ffffff",
+			"titleBar.inactiveBackground": "#246a99",
+			"titleBar.inactiveForeground": "#cccccc",
+			"activityBar.background": "#3498db",
+			"activityBar.foreground": "#ffffff",
+			"activityBar.activeBorder": "#5cace2",
+			"sideBar.background": "#246a99",
+			"sideBar.foreground": "#ffffff",
+			"sideBarTitle.foreground": "#ffffff",
+			"statusBar.background": "#3498db",
+			"statusBar.foreground": "#ffffff",
+			"tab.activeBackground": "#5cace2",
+			"tab.activeForeground": "#ffffff",
+			"tab.inactiveBackground": "#3498db",
+			"tab.inactiveForeground": "#cccccc",
+			"tab.border": "#5cace2",
+			"editorGroup.border": "#5cace2",
+			"editorGroupHeader.tabsBackground": "#246a99"
+		},
+		"typescript.format.enable": false
+	},
+	"extensions": {
+		"recommendations": []
+	}
+}

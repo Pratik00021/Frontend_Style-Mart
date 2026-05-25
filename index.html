@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StyleMart | Premium Collection</title>
+  <style>
+    /* Global Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; scroll-behavior: smooth; }
+    body { background: #f9f9f9; color: #222; }
+
+    /* SEARCH BOX */
+
+.search-box{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  margin:0 20px;
+}
+
+.search-box input{
+
+  width:100%;
+  max-width:450px;
+
+  padding:10px 18px;
+
+  border-radius:25px;
+  border:1px solid #ccc;
+
+  outline:none;
+  font-size:14px;
+
+}
+
+.search-box input:focus{
+
+  border-color:#2874f0;
+  box-shadow:0 0 5px rgba(40,116,240,0.3);
+}
+
+
+
+    /* Header */
+    header {
+      background: #111; color: #fff; padding: 15px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 1000;
+    }
+    nav { display: flex; align-items: center; }
+    nav a { color: #fff; margin-left: 20px; text-decoration: none; font-size: 14px; text-transform: uppercase; cursor: pointer; }
+    nav a:hover { color: #ff4d4d; }
+
+    /* Profile Dropdown Styles */
+    .profile-dropdown { position: relative; display: none; margin-left: 20px; }
+    .profile-btn { background: #333; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; border: 1px solid #444; }
+    .dropdown-content {
+      display: none; position: absolute; right: 0; top: 100%;
+      background-color: #fff; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      border-radius: 4px; overflow: hidden; margin-top: 10px; border: 1px solid #ddd;
+    }
+    .dropdown-content a {
+      color: #333; padding: 12px 16px; text-decoration: none;
+      display: block; margin-left: 0; text-transform: none; border-bottom: 1px solid #f1f1f1; font-size: 14px;
+    }
+    .dropdown-content a:hover { background-color: #f9f9f9; color: #ff4d4d; }
+    .show { display: block; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8') center/cover;
+      height: 45vh; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; text-align: center;
+    }
+
+    /* Section Styling */
+    section { padding: 60px 40px; max-width: 1300px; margin: 0 auto; }
+    .section-title { font-size: 28px; margin-bottom: 30px; text-align: left; border-left: 5px solid #ff4d4d; padding-left: 15px; text-transform: uppercase; }
+
+    /* Product Grid */
+    .product-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px;
+    }
+    .product {
+      background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 15px; transition: 0.3s; position: relative;
+    }
+    .product:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .product img { width: 100%; height: 240px; object-fit: cover; border-radius: 4px; }
+    .product .tag {
+      position: absolute; top: 10px; left: 10px; background: #ff4d4d; color: #fff; padding: 4px 8px;
+      font-size: 10px; font-weight: bold; border-radius: 3px; z-index: 10;
+    }
+    .product .tag.blue { background: #007bff; }
+    .product h4 { margin: 12px 0 5px; font-size: 16px; color: #333; }
+    .product .price { font-weight: bold; color: #111; font-size: 18px; }
+    .product .old-price { text-decoration: line-through; color: #999; font-size: 14px; margin-left: 5px; }
+    .buy-btn {
+      width: 100%; margin-top: 10px; padding: 12px; background: #f5f5f5; border: none; border-radius: 4px;
+      cursor: pointer; font-weight: 600; transition: 0.3s;
+    }
+    .buy-btn:hover { background: #111; color: #fff; }
+
+    /* Modals */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; }
+    .modal-box { background: #fff; padding: 30px; border-radius: 8px; width: 400px; }
+    
+    footer { background: #111; color: #fff; padding: 40px; text-align: center; margin-top: 40px; }
+  </style>
+</head>
+<body>
+<header>
+
+<h1>StyleMart</h1>
+
+<div class="search-box">
+
+<input
+type="search"
+id="searchBox"
+placeholder="Search products..."
+onkeyup="searchProducts()"
+autocomplete="off">
+
+<div id="suggestions"></div>
+
+</div>
+
+<nav>
+<a href="#home">Home</a>
+<a href="#shoes">Shoes</a>
+<a href="#tshirts">T-Shirts</a>
+
+<a href="cart.html">
+🛒 Cart (<span id="cartCount">0</span>)
+</a>
+
+
+
+</div>
+     <a id="loginLink" onclick="openModal('loginModal')">Login</a>
+      <div id="profileMenu" class="profile-dropdown">
+      <div class="profile-btn" id="profileBtn" onclick="toggleDropdown()">Hi, User ▼</div>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="#" onclick="openOrders()">📦 My Orders</a>
+          <a href="#" onclick="openAccountSettings()">⚙️ Account Settings</a>
+          <a href="#" onclick="openModal('termsModal')">📄 Terms & Conditions</a>
+          <a href="#" onclick="openModal('supportModal')">🎧 Customer Care</a>
+          <a href="#" onclick="handleLogout()" style="color: red; border-top: 1px solid #ddd;">Logout</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+
+ <div id="home" class="hero">
+    <h1 id="heroTitle">PREMIUM FASHION</h1>
+    <p id="heroSubtitle">Step up your style game with our new arrivals</p>
+  </div>
+
+  <section id="shoes">
+    <h2 class="section-title">Premium Footwear</h2>
+    <div class="product-grid">
+      <div class="product" onclick="openProduct('Air Speed Runners',2999,'https://images.unsplash.com/photo-1542291026-7eec264c27ff')">
+        <span class="tag">HOT</span>
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Shoe">
+        <h4>Air Speed Runners</h4>
+        <p><span class="price">₹2,999</span> <span class="old-price">₹4,500</span></p>
+        <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+      </div>
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a" alt="Shoe">
+        <h4>White Street Sneakers</h4>
+        <p><span class="price">₹1,599</span></p>
+       <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <span class="tag blue">NEW</span>
+        <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5" alt="Shoe">
+        <h4>Classic Blue Trainers</h4>
+        <p><span class="price">₹2,100</span></p>
+        <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772" alt="Shoe">
+        <h4>Suede Desert Boots</h4>
+        <p><span class="price">₹3,499</span> <span class="old-price">₹5,000</span></p>
+        <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86" alt="Shoe">
+        <h4>Urban Sport Max</h4>
+        <p><span class="price">₹4,200</span></p>
+        <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <span class="tag">SALE</span>
+        <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77" alt="Shoe">
+        <h4>Legacy Old Skool</h4>
+        <p><span class="price">₹1,999</span> <span class="old-price">₹3200</span></p>
+        <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="tshirts" style="background: #fff;">
+    <h2 class="section-title">Trending T-Shirts</h2>
+    <div class="product-grid">
+      <div class="product"
+       onclick="openProduct('Minimal White Tee',499,'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab')">
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab" alt="Shirt">
+        <h4>Minimal White Tee</h4>
+        <p><span class="price">₹499</span></p>
+       <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <span class="tag blue">NEW</span>
+        <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a" alt="Shirt">
+        <h4>Black Graphic Tee</h4>
+        <p><span class="price">₹799</span> <span class="old-price">₹999</span></p>
+         <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27" alt="Shirt">
+        <h4>Vintage Yellow Tee</h4>
+        <p><span class="price">₹650</span></p>
+        <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990" alt="Shirt">
+        <h4>Premium Black Cotton</h4>
+        <p><span class="price">₹899</span></p>
+        <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <span class="tag">LIMITED</span>
+        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c" alt="Shirt">
+        <h4>Street Style Oversized</h4>
+        <p><span class="price">₹1,200</span></p>
+         <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+      <div class="product">
+        <img src="https://images.unsplash.com/photo-1562157873-818bc0726f68" alt="Shirt">
+        <h4>Polo Navy Classic</h4>
+        <p><span class="price">₹1,100</span></p>
+         <button class="buy-btn"
+onclick="event.stopPropagation(); addToCart(
+this.parentElement.querySelector('h4').innerText,
+parseInt(this.parentElement.querySelector('.price').innerText.replace('₹','').replace(',','')),
+this.parentElement.querySelector('img').src
+)">
+Add to Cart
+</button>
+
+      </div>
+    </div>
+  </section>
+
+
+  <footer>
+    <p>© 2026 StyleMart | Premium Quality Assurance</p>
+  </footer>
+
+<div class="modal" id="loginModal">
+  <div class="modal-box">
+
+    <h2 id="authTitle">Login</h2>
+
+    <input type="email" id="email"
+      placeholder="Email"
+      style="width:100%; display:block; padding:10px; margin:15px 0;">
+
+    <input type="text" id="name"
+       placeholder="Name"
+       style="width:100%; display:none; padding:10px; margin:10px 0;">
+
+    <input type="password" id="password"
+      placeholder="Password"
+      style="width:100%; display:block; padding:10px; margin-bottom:20px;">
+
+    <button id="authBtn"
+      onclick="authenticate()"
+      style="width:100%; display:block; padding:10px; background:#111; color:#fff; border:none; cursor:pointer;">
+      Login
+    </button>
+
+    <!-- SIGN UP TOGGLE -->
+    <p id="toggleText" onclick="toggleAuth()"
+    style="text-align:center; margin-top:15px; cursor:pointer; color:#0d1013dc;">
+    New user? Sign up</p>
+
+    <p onclick="closeModal('loginModal')"
+      style="text-align:center; margin-top:10px; cursor:pointer; color:red; font-size:12px;">
+      Close
+    </p>
+
+  </div>
+</div>
+
+  <div class="modal" id="termsModal">
+    <div class="modal-box">
+      <h2>Terms & Conditions</h2>
+      <div style="font-size: 13px; color: #666; margin: 20px 0; line-height: 1.6;">
+        <p>• Returns accepted within 30 days.</p>
+        <p>• Standard shipping rates apply.</p>
+      </div>
+      <button onclick="closeModal('termsModal')" style="width:100%; padding:10px; background:#111; color:#fff; border:none; cursor:pointer;">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="supportModal">
+    <div class="modal-box">
+      <h2>Customer Care</h2>
+      <div style="margin: 20px 0;">
+        <p>📞 Phone: 1800-STYLE-MART</p>
+        <p>✉️ Email: support@stylemart.com</p>
+      </div>
+      <button onclick="closeModal('supportModal')" style="width:100%; padding:10px; background:#111; color:#fff; border:none; cursor:pointer;">Close</button>
+    </div>
+  </div>
+  <div id="checkoutModal" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+z-index:5000;
+justify-content:center;
+align-items:center;
+">
+
+  <div style="
+  background:white;
+  width:400px;
+  padding:25px;
+  border-radius:6px;
+  ">
+
+    <h3>Delivery Details</h3>
+
+    <input id="custName" placeholder="Full Name"
+    style="width:100%;padding:8px;margin:10px 0;">
+
+    <input id="custAddress" placeholder="Address"
+    style="width:100%;padding:8px;margin-bottom:10px;">
+
+    <select id="paymentMode"
+    style="width:100%;padding:8px;margin-bottom:15px;">
+      <option value="">Select Payment Mode</option>
+      <option>Cash on Delivery</option>
+      <option>UPI</option>
+      <option>Credit / Debit Card</option>
+    </select>
+
+     <button onclick="confirmOrder()" 
+   style="width:100%;padding:10px;background:#2874f0;color:white;border:none;">
+   CONFIRM ORDER</button>
+
+    <button onclick="closeCheckout()"
+    style="width:100%;margin-top:8px;padding:8px;background:#eee;border:none;">
+    Cancel
+    </button>
+
+  </div>
+</div>
+
+    <!-- MY ORDERS MODAL -->
+
+    <div id="ordersModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    z-index:6000;
+    justify-content:center;
+    align-items:center;
+    ">
+
+  <div style="
+  background:white;
+  width:500px;
+  max-height:500px;
+  overflow:auto;
+  padding:20px;
+  border-radius:6px;
+  ">
+
+    <h3>My Orders</h3>
+
+    <div id="ordersList" style="margin-top:15px;"></div>
+
+    <button onclick="closeOrders()"
+    style="margin-top:15px;width:100%;padding:8px;background:#eee;border:none;">
+    Close
+    </button>
+
+  </div>
+
+</div>
+
+ <!-- ACCOUNT SETTINGS MODAL -->
+
+<div id="accountModal" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+z-index:6000;
+justify-content:center;
+align-items:center;
+">
+
+  <div style="
+  background:white;
+  width:400px;
+  padding:25px;
+  border-radius:6px;
+  ">
+
+    <h3>Account Settings</h3>
+
+    <label>Email</label>
+    <input id="accEmail" disabled
+    style="width:100%;padding:8px;margin:8px 0;">
+
+    <label>Change Name</label>
+    <input id="accName"
+    placeholder="Enter new name"
+    style="width:100%;padding:8px;margin:8px 0;">
+
+    <label>Change Password</label>
+    <input id="accPassword"
+    type="password"
+    placeholder="Enter new password"
+    style="width:100%;padding:8px;margin:8px 0;">
+
+    <button onclick="saveAccountChanges()"
+    style="width:100%;padding:10px;background:#01060fda;color:white;border:none;margin-top:10px;">
+    Save Changes
+    </button>
+
+    <button onclick="closeAccountSettings()"
+    style="width:100%;padding:8px;background:#eee;border:none;margin-top:8px;">
+    Cancel
+    </button>
+
+  </div>
+</div>
+
+<script>
+  console.log("SCRIPT LOADED");
+
+  /* ================= MODAL ================= */
+  function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+  }
+
+  /* ================= PROFILE DROPDOWN ================= */
+  function toggleDropdown() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  window.onclick = function (event) {
+    if (!event.target.matches(".profile-btn")) {
+      const dropdowns = document.getElementsByClassName("dropdown-content");
+      for (let i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].classList.remove("show");
+      }
+    }
+  };
+
+  /* ================= LOGIN / SIGNUP ================= */
+ 
+
+
+ let isSignup = false;
+
+function toggleAuth() {
+  isSignup = !isSignup;
+
+  document.getElementById("authTitle").innerText =
+    isSignup ? "Sign Up" : "Login";
+
+  document.getElementById("authBtn").innerText =
+    isSignup ? "Create Account" : "Login";
+
+  document.getElementById("name").style.display =
+    isSignup ? "block" : "none";
+
+  // ✅ FIX TEXT HERE
+  document.getElementById("toggleText").innerText =
+    isSignup
+      ? "Already have an account? Login"
+      : "New user? Sign up";
+}
+
+async function authenticate() {
+
+  const name = document.getElementById("name")?.value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!email || !password || (isSignup && !name)) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  const url = isSignup
+    ? "http://localhost:5000/signup"
+    : "http://localhost:5000/login";
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password })
+    });
+
+    const data = await res.json();
+
+    console.log("API RESPONSE:", data); // 🔥 DEBUG
+
+    // ✅ FIX: HANDLE BOTH CASES
+    if (data.user) {
+
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+      showLoggedInUI(data.user);
+
+    } 
+    else if (data.email) {
+      // fallback if backend only sends email
+      const user = {
+        name: data.email.split("@")[0],
+        email: data.email
+      };
+
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+      showLoggedInUI(user);
+    }
+    else {
+      alert(data.message || "Login failed");
+      return;
+    }
+
+    closeModal("loginModal");
+    alert("Login successful ✅");
+
+  } catch (err) {
+    console.log(err);
+    alert("Backend not running");
+  }
+}
+
+function showLoggedInUI(user) {
+
+  if (!user) return;
+
+  document.getElementById("loginLink").style.display = "none";
+  document.getElementById("profileMenu").style.display = "block";
+
+  const name = user.name || user.email.split("@")[0];
+
+  document.getElementById("profileBtn").innerText =
+    "Hi, " + name + " ▼";
+
+  document.getElementById("heroTitle").innerText =
+    "WELCOME, " + name.toUpperCase();
+}
+
+
+
+
+/* ===== STYLE DROPDOWN CART ===== */
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+updateCartCount();
+
+/* ================= ADD TO CART ================= */
+
+function addToCart(name, price, image){
+
+const user = localStorage.getItem("loggedInUser");
+
+if(!user){
+alert("Login First");
+openModal("loginModal");
+return;
+}
+
+let item = cart.find(p => p.name === name);
+
+if(item){
+item.qty++;
+}else{
+cart.push({
+id: Date.now(),
+name: name,
+price: Number(price),
+image: image,
+qty: 1
+});
+}
+
+saveCart();
+}
+
+
+/* ================= SAVE CART ================= */
+
+function saveCart(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
+  renderCart();
+}
+
+/* ================= TOGGLE DROPDOWN ================= */
+
+
+
+/* ================= UPDATE COUNT ================= */
+
+function updateCartCount(){
+  document.getElementById("cartCount").innerText =
+    cart.reduce((total,item)=> total + item.qty ,0);
+}
+
+/* ================= INCREASE ================= */
+
+function increaseQty(id){
+  let item = cart.find(i => i.id === id);
+  if(item){
+    item.qty++;
+    saveCart();
+  }
+}
+
+/* ================= DECREASE ================= */
+
+function decreaseQty(id){
+  let item = cart.find(i => i.id === id);
+
+  if(item){
+    item.qty--;
+    if(item.qty <= 0){
+      cart = cart.filter(i => i.id !== id);
+    }
+    saveCart();
+  }
+}
+
+/* ================= REMOVE ================= */
+
+function removeFromCart(id){
+  cart = cart.filter(i => i.id !== id);
+  saveCart();
+}
+
+/* ================= RENDER CART ================= */
+
+function renderCart(){
+
+  console.log(cart);
+  const div = document.getElementById("cartItems");
+  const totalDiv = document.getElementById("cartTotal");
+
+  if(cart.length === 0){
+    div.innerHTML = "<p style='color:#555'>Your cart is empty</p>";
+    totalDiv.innerHTML = "";
+    return;
+  }
+
+  let html = "";
+  let total = 0;
+
+  cart.forEach(item => {
+
+    total += item.price * item.qty;
+
+html += `
+<div style="
+  display:flex;
+  flex-direction:row;   /* keeps image + text in one line */
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid #eee;
+  padding:10px 0;
+">
+
+  <!-- IMAGE -->
+  <img src="${item.image || 'https://via.placeholder.com/60'}"
+       style="width:60px;height:60px;border-radius:6px;object-fit:cover;" />
+
+  <!-- DETAILS -->
+  <div style="flex:1;">
+    
+    <!-- NAME -->
+    <div style="font-weight:bold;">
+      ${item.name || "Product"}
+    </div>
+
+    <!-- PRICE -->
+    <div style="color:#555;">
+      ₹${item.price}
+    </div>
+
+    <!-- QTY -->
+    <div style="margin-top:5px;">
+      <button onclick="decreaseQty(${item.id})">-</button>
+      ${item.qty}
+      <button onclick="increaseQty(${item.id})">+</button>
+    </div>
+
+  </div>
+
+  <!-- REMOVE -->
+  <button onclick="removeFromCart(${item.id})"
+    style="background:none;border:none;color:#2874f0;">
+    REMOVE
+  </button>
+
+</div>
+`;
+  })
+
+
+  div.innerHTML = html;
+  totalDiv.innerHTML = "<b>Total: ₹" + total + "</b>";
+}
+
+
+/* ===== PLACE ORDER SYSTEM ===== */
+
+function placeOrder(){
+
+  if(cart.length === 0){
+    alert("Your cart is empty");
+    return;
+  }
+
+  document.getElementById("checkoutModal").style.display="flex";
+}
+
+
+function closeCheckout(){
+  document.getElementById("checkoutModal").style.display="none";
+}
+
+/* ===== CONFIRM ORDER ===== */
+function confirmOrder(){
+
+const name = document.getElementById("custName").value.trim();
+const address = document.getElementById("custAddress").value.trim();
+const payment = document.getElementById("paymentMode").value;
+
+if(!name || !address || !payment){
+alert("Please fill all details");
+return;
+}
+
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+const email = user?.email;
+
+const totalAmount = cart.reduce((sum,item)=> sum + item.price*item.qty ,0);
+
+fetch("http://localhost:5000/place-order",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+email:email,
+items:cart.map(i=>({
+name:i.name,
+price:i.price,
+qty:i.qty,
+image: i.image // ✅ ADD THIS
+})),
+total:totalAmount,
+address:address,
+payment:payment
+})
+
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(!data.success){
+alert(data.message || "Order failed");
+return;
+}
+
+alert("Order placed successfully");
+
+cart=[];
+localStorage.removeItem("cart");
+
+updateCartCount();
+renderCart();
+
+closeCheckout();
+document.getElementById("cartSidebar").style.display="none";
+
+})
+
+.catch(err=>{
+console.log(err);
+alert("Order failed");
+});
+
+}
+
+/* ===== MY ORDERS ===== */
+
+function openOrders(){
+
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+const email = user?.email;
+const container = document.getElementById("ordersList");
+
+container.innerHTML = "Loading orders...";
+
+fetch("http://localhost:5000/my-orders/" + email)
+
+.then(res => res.json())
+
+.then(orders => {
+
+if(!orders || orders.length === 0){
+container.innerHTML = "<p>No orders found.</p>";
+return;
+}
+
+let html = "";
+
+orders.reverse().forEach(order => {
+
+if(order.items && order.items.length > 0){
+
+order.items.forEach(item => {
+
+html += `
+
+<div style="
+display:flex;
+align-items:center;
+justify-content:space-between;
+border:1px solid #ddd;
+padding:15px;
+margin-bottom:15px;
+border-radius:6px;
+background:white;
+">
+
+<div style="display:flex;align-items:center;gap:15px;">
+
+<img src="${item.image}"
+style="width:70px;height:70px;object-fit:cover;border-radius:4px;">
+
+
+<div>
+
+<b>${item.name}</b><br>
+
+<span style="color:#555">Qty: ${item.qty}</span><br>
+
+<span style="color:#777;font-size:13px;">
+Ordered on ${new Date(order.date).toLocaleDateString()}
+</span>
+
+</div>
+
+</div>
+
+<div style="
+font-weight:600;
+margin-bottom:5px;
+color:
+${order.status==="Confirmed"?"green":
+order.status==="Cancelled"?"red":"orange"}
+">
+
+● ${order.status}
+
+</div>
+
+<button onclick="cancelOrder('${order._id}')"
+style="
+background:red;
+color:white;
+border:none;
+padding:5px 10px;
+border-radius:4px;
+cursor:pointer;
+font-size:12px;
+">
+Cancel Order
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+});
+
+container.innerHTML = html;
+
+})
+
+.catch(err => {
+
+console.log(err);
+
+container.innerHTML = "Error loading orders";
+
+});
+
+document.getElementById("ordersModal").style.display = "flex";
+
+}
+
+/* ===== CANCEL ORDER ===== */
+
+function cancelOrder(id){
+
+if(!confirm("Are you sure you want to cancel this order?"))
+return;
+
+fetch("http://localhost:5000/cancel-order/"+id,{
+method:"DELETE"
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+alert(data.message);
+
+openOrders(); // reload orders
+
+})
+
+.catch(err=>{
+
+console.log(err);
+alert("Cancel failed");
+
+});
+
+}
+
+
+/* CLOSE ORDERS MODAL */
+
+function closeOrders(){
+document.getElementById("ordersModal").style.display = "none";
+}
+   
+/* ===== ACCOUNT SETTINGS ===== */
+
+function openAccountSettings(){
+
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+  if(!user){
+    alert("Please login first");
+    return;
+  }
+
+  // ✅ Show email
+  document.getElementById("accEmail").value = user.email;
+
+  // ✅ Show current name
+  document.getElementById("accName").value = user.name || "";
+
+  document.getElementById("accountModal").style.display = "flex";
+}
+
+function closeAccountSettings(){
+  document.getElementById("accountModal").style.display = "none";
+}
+
+function saveAccountChanges(){
+
+  let user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+  const newName = document.getElementById("accName").value.trim();
+  const newPassword = document.getElementById("accPassword").value.trim();
+
+  if(!user){
+    alert("User not found");
+    return;
+  }
+
+  // ✅ Update name
+  if(newName){
+    user.name = newName;
+  }
+
+  // ✅ Save updated user (FIXED)
+  localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+  // ✅ Update UI instantly
+  document.getElementById("profileBtn").innerText =
+    "Hi, " + user.name + " ▼";
+
+  document.getElementById("heroTitle").innerText =
+    "WELCOME, " + user.name.toUpperCase();
+
+  // Optional password message
+  if(newPassword){
+    alert("Password updated (Demo Mode Only)");
+  }
+
+  alert("Account updated successfully ✅");
+
+  closeAccountSettings();
+}
+
+
+function searchProducts(){
+
+let input =
+document.getElementById("searchBox")
+.value
+.toLowerCase()
+.trim();
+
+let products =
+document.getElementsByClassName("product");
+
+for(let i=0;i<products.length;i++){
+
+let name =
+products[i]
+.getElementsByTagName("h4")[0]
+.innerText
+.toLowerCase();
+
+if(input === ""){
+products[i].style.display="block";
+}
+else if(name.includes(input)){
+products[i].style.display="block";
+}
+else{
+products[i].style.display="none";
+}
+
+}
+
+}
+
+/* ===== LOAD PRODUCTS ===== */
+
+async function loadProducts(){
+
+const products = await fetch("http://localhost:5000/products").then(res=>res.json());
+
+products.forEach(p=>{
+
+let html = `
+<div class="product"
+onclick="openProduct('${p.name}',${p.price},'http://localhost:5000/uploads/${p.image}')">
+
+<img src="http://localhost:5000/uploads/${p.image}">
+
+<h4>${p.name}</h4>
+
+<p><span class="price">₹${p.price}</span></p>
+
+<button class="buy-btn"
+onclick="addToCart('${p.name}',${p.price});event.stopPropagation();">
+Add to Cart
+</button>
+
+</div>
+`;
+
+if(p.category === "shoes"){
+
+document
+.querySelector("#shoes .product-grid")
+.innerHTML += html;
+
+}
+
+if(p.category === "tshirts"){
+
+document
+.querySelector("#tshirts .product-grid")
+.innerHTML += html;
+
+}
+
+});
+
+}
+
+/* ===== OPEN PRODUCT ===== */
+
+function openProduct(name, price, image){
+
+if(!name || name === "undefined"){
+alert("Product name missing ❌");
+return;
+}
+
+const product = {
+name: name,
+price: Number(price),
+image: image
+};
+
+localStorage.setItem("selectedProduct", JSON.stringify(product));
+
+window.location.href = "product.html";
+
+}
+
+
+/* ===== PRODUCT CLICK HANDLER ===== */
+
+
+/* ===== BUY BUTTON CLICK HANDLER ===== */
+
+document.querySelectorAll(".buy-btn").forEach(btn => {
+
+btn.addEventListener("click", function(e){
+
+e.stopPropagation(); // 🔥 stops product click
+
+});
+
+});
+
+/* ===== LOGOUT HANDLER ===== */
+
+function handleLogout() {
+
+  // Remove only user
+  localStorage.removeItem("loggedInUser");
+
+  // Hide profile
+  document.getElementById("profileMenu").style.display = "none";
+
+  // Show login button
+  document.getElementById("loginLink").style.display = "block";
+
+  // Reset UI
+  document.getElementById("profileBtn").innerText = "Hi, User ▼";
+  document.getElementById("heroTitle").innerText = "PREMIUM FASHION";
+
+  alert("Logged out successfully ✅");
+}
+
+
+
+
+ /* ================= ON LOAD ================= */
+window.onload = function () {
+
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+  if (user) {
+    showLoggedInUI(user);
+  } else {
+    document.getElementById("loginLink").style.display = "block";
+    document.getElementById("profileMenu").style.display = "none";
+  }
+
+  updateCartCount();
+  loadProducts();
+};
+</script>
+</body>
+</html>

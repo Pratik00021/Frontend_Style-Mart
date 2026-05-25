@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Product Details</title>
+
+<style>
+
+body{
+font-family:Segoe UI;
+background:#f1f3f6;
+margin:0;
+}
+
+.product-container{
+display:flex;
+gap:40px;
+padding:40px;
+background:white;
+margin:20px;
+}
+
+.images img{
+width:320px;
+border-radius:10px;
+}
+
+.details{
+max-width:450px;
+}
+
+.price{
+font-size:28px;
+color:green;
+font-weight:bold;
+margin:10px 0;
+}
+
+.size button{
+padding:10px 15px;
+margin:5px;
+cursor:pointer;
+border:1px solid #ccc;
+background:white;
+}
+
+.cart{
+background:#ff9f00;
+border:none;
+padding:12px 25px;
+margin-top:20px;
+cursor:pointer;
+}
+
+.buy{
+background:#fb641b;
+color:white;
+border:none;
+padding:12px 25px;
+margin-left:10px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="product-container">
+
+<div class="images">
+<img id="productImage">
+</div>
+
+<div class="details">
+
+<h2 id="productName"></h2>
+
+<p class="price">₹<span id="productPrice"></span></p>
+
+<h3>Select Size</h3>
+
+<div class="size">
+<button>S</button>
+<button>M</button>
+<button>L</button>
+<button>XL</button>
+</div>
+
+<button class="cart" onclick="addToCart()">Add to Cart</button>
+<button class="buy" onclick="buyNow()">Buy Now</button>
+
+</div>
+</div>
+
+<h2 style="margin-left:40px;">Similar Products</h2>
+
+<div id="suggestedProducts" style="
+display:flex;
+gap:20px;
+padding:20px 40px;
+flex-wrap:wrap;
+"></div>
+
+<script>
+
+/* LOAD PRODUCT */
+const product = JSON.parse(localStorage.getItem("selectedProduct"));
+
+console.log("Product Data:", product);
+
+if(!product || !product.name){
+alert("Product not loaded ❌");
+window.location.href = "index.html";
+}
+
+document.getElementById("productName").innerText = product.name;
+document.getElementById("productPrice").innerText = product.price;
+document.getElementById("productImage").src = product.image;
+
+/* ADD TO CART */
+function addToCart(){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const product = JSON.parse(localStorage.getItem("selectedProduct"));
+
+if(!product || !product.name){
+alert("Product missing ❌");
+return;
+}
+
+let item = cart.find(p => p.name === product.name);
+
+if(item){
+item.qty++;
+}else{
+cart.push({
+name: product.name,
+price: product.price,
+qty: 1
+});
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
+alert(product.name + " added to cart ✅");
+
+}
+
+
+/* BUY NOW */
+function buyNow(){
+addToCart();
+window.location.href = "index.html";
+}
+
+
+/* OPEN PRODUCT AGAIN */
+function openProduct(name, price, image){
+
+localStorage.setItem("selectedProduct", JSON.stringify({
+name:name,
+price:price,
+image:image
+}));
+
+location.reload();
+}
+
+
+/* SIMILAR PRODUCTS */
+fetch("http://localhost:5000/products")
+.then(res => res.json())
+.then(products => {
+
+const container = document.getElementById("suggestedProducts");
+
+products.forEach(p => {
+
+if(p.name !== product.name){
+
+let img = "http://localhost:5000/uploads/" + p.image;
+
+container.innerHTML += `
+<div onclick="openProduct('${p.name}',${p.price},'${img}')"
+style="width:180px;background:white;padding:10px;border-radius:6px;cursor:pointer;">
+
+<img src="${img}" style="width:100%;height:180px;object-fit:cover;">
+
+<h4>${p.name}</h4>
+<p>₹${p.price}</p>
+
+</div>
+`;
+
+}
+
+});
+
+});
+
+</script>
+
+</body>
+</html>

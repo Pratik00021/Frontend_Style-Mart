@@ -1,0 +1,19 @@
+localStorage.getItem("role")
+
+
+localStorage.getItem("role") === "admin"
+
+
+localStorage.setItem("role", data.role);
+
+
+localStorage.getItem("role")
+
+       
+
+
+        BACKEND CONNECTION 
+
+cd C:\Users\user\OneDrive\Desktop\Backend
+
+node server.js 
