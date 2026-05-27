@@ -325,8 +325,8 @@ loadDashboard();
 
 async function loadDashboard(){
 
-const users=await fetch("http://localhost:5000/admin/users").then(r=>r.json());
-const orders=await fetch("http://localhost:5000/admin/orders").then(r=>r.json());
+const users=await fetch("https://backend-style-mart.vercel.app/admin/users").then(r=>r.json());
+const orders=await fetch("https://backend-style-mart.vercel.app/admin/orders").then(r=>r.json());
 
 document.getElementById("totalUsers").innerText=users.length;
 document.getElementById("totalOrders").innerText=orders.length;
@@ -349,7 +349,7 @@ document.getElementById("content").innerHTML="";
 
 async function loadUsers(){
 
-const users=await fetch("http://localhost:5000/admin/users").then(r=>r.json());
+const users=await fetch("https://backend-style-mart.vercel.app/admin/users").then(r=>r.json());
 
 let html=`<div class="section">
 <h2>Users</h2>
@@ -386,7 +386,7 @@ content.innerHTML=html;
 
 async function deleteUser(id){
 
-await fetch("http://localhost:5000/admin/user/"+id,{method:"DELETE"});
+await fetch("https://backend-style-mart.vercel.app/admin/user/"+id,{method:"DELETE"});
 
 loadUsers();
 loadDashboard();
@@ -398,7 +398,7 @@ loadDashboard();
 async function loadProducts(){
 
 const products = await fetch(
-"http://localhost:5000/admin/products"
+"https://backend-style-mart.vercel.app/admin/products"
 ).then(r=>r.json());
 
 let html = `
@@ -432,7 +432,7 @@ html += `
 <tr>
 
 <td>
-<img src="http://localhost:5000/uploads/${p.image}" width="50">
+<img src="https://backend-style-mart.vercel.app/uploads/${p.image}" width="50">
 </td>
 
 <td>${p.name}</td>
@@ -488,7 +488,7 @@ if(imageFile){
 formData.append("image", imageFile);
 }
 
-await fetch("http://localhost:5000/admin/product",{
+await fetch("https://backend-style-mart.vercel.app/admin/product",{
 method:"POST",
 body:formData
 });
@@ -514,7 +514,7 @@ pprice.value=price;
 
 async function deleteProduct(id){
 
-await fetch("http://localhost:5000/admin/product/"+id,{
+await fetch("https://backend-style-mart.vercel.app/admin/product/"+id,{
 method:"DELETE"
 });
 
@@ -528,7 +528,7 @@ loadProducts();
 async function loadOrders(){
 
 const orders=await fetch(
-"http://localhost:5000/admin/orders"
+"https://backend-style-mart.vercel.app/admin/orders"
 ).then(r=>r.json());
 
 let html=`
@@ -596,7 +596,7 @@ content.innerHTML=html;
 async function updateOrder(id,status){
 
 await fetch(
-"http://localhost:5000/admin/order/"+id,
+"https://backend-style-mart.vercel.app0/admin/order/"+id,
 {
 method:"PUT",
 headers:{
@@ -682,7 +682,7 @@ return;
 
 }
 
-const res = await fetch("http://localhost:5000/login",{
+const res = await fetch("https://backend-style-mart.vercel.app/login",{
 
 method:"POST",
 
