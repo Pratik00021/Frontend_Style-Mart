@@ -169,7 +169,7 @@ location.reload();
 
 
 /* SIMILAR PRODUCTS */
-fetch("http://localhost:5000/products")
+fetch("https://backend-style-mart.vercel.app/products")
 .then(res => res.json())
 .then(products => {
 
@@ -179,7 +179,7 @@ products.forEach(p => {
 
 if(p.name !== product.name){
 
-let img = "http://localhost:5000/uploads/" + p.image;
+let img = "https://backend-style-mart.vercel.app/uploads/" + p.image;
 
 container.innerHTML += `
 <div onclick="openProduct('${p.name}',${p.price},'${img}')"
