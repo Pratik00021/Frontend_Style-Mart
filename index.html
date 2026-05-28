@@ -614,20 +614,20 @@ async function authenticate() {
 
     localStorage.setItem("loggedInUser",JSON.stringify(data.user));
 
-   showLoggedInUI(data.user);
+  showLoggedInUI(data.user);
 
-  }
-    else if (data.email) {
-      // fallback if backend only sends email
-      const user = {
-        name: data.email.split("@")[0],
-        email: data.email
-      };
+}
 
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
+else if(data.email){
 
-      showLoggedInUI(user);
-    }
+const user = {name: data.email.split("@")[0],email: data.email
+};
+
+    localStorage.setItem("loggedInUser",JSON.stringify(user));
+
+showLoggedInUI(user);
+
+}
     else {
       alert(data.message || "Login failed");
       return;
@@ -638,7 +638,7 @@ async function authenticate() {
 
   } catch (err) {
     console.log(err);
-    alert("Backend not running");
+    alert(err.message);
   }
 }
 
