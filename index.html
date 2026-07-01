@@ -595,13 +595,8 @@ async function authenticate() {
   }
 
   const url = isSignup
-<<<<<<< HEAD
     ? "https://backend-style-mart.vercel.app/signup"
     : "https://backend-style-mart.vercel.app/login";
-=======
-  ? "https://backend-style-mart.vercel.app/signup"
-  : "https://backend-style-mart.vercel.app/login";
->>>>>>> 9e1600a959aca08ee79f834d27295ce912a92c83
 
   try {
     const res = await fetch(url, {
@@ -615,13 +610,13 @@ async function authenticate() {
     console.log("API RESPONSE:", data); // 🔥 DEBUG
 
     // ✅ FIX: HANDLE BOTH CASES
-   if(data.user){
+    if (data.user) {
 
-    localStorage.setItem("loggedInUser",JSON.stringify(data.user));
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
 
-   showLoggedInUI(data.user);
+      showLoggedInUI(data.user);
 
-  }
+    } 
     else if (data.email) {
       // fallback if backend only sends email
       const user = {
@@ -1168,16 +1163,9 @@ products.forEach(p=>{
 
 let html = `
 <div class="product"
-<<<<<<< HEAD
 onclick="openProduct('${p.name}',${p.price},'${p.image}')">
 
 <img src="${p.image}">
-=======
-onclick="openProduct('${p.name}',${p.price},'https://backend-style-mart.vercel.app/uploads/${p.image}')"
-
-<img src="
-https://backend-style-mart.vercel.app/uploads/${p.image}">
->>>>>>> 9e1600a959aca08ee79f834d27295ce912a92c83
 
 <h4>${p.name}</h4>
 
